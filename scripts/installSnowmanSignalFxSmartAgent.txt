@@ -1,0 +1,29 @@
+#!/bin/bash
+curl -sSL https://splunk.jfrog.io/splunk/signalfx-agent-deb/splunk-B3CD4420.gpg > /etc/apt/trusted.gpg.d/splunk.gpg;
+echo 'deb https://splunk.jfrog.io/splunk/signalfx-agent-deb release main' > /etc/apt/sources.list.d/signalfx-agent.list
+apt-get update
+apt-get install -y signalfx-agent
+echo "ENTER_YOUR_TOKEN_HERE" > /etc/signalfx/token
+systemctl restart signalfx-agent.service
+
+apt-get install -y nodejs
+apt-get install -y npm
+apt-get install -y node-express
+apt-get install -y node-express-generator
+apt-get install -y git
+
+
+echo "
+
+# clone snowman from git repo
+git clone https://github.com/rydersean/tracing-examples
+cd tracing-examples/signalfx-tracing/signalfx-nodejs-tracing/express
+
+# Run the server in one terminal
+npm install
+npm start
+
+# Run the client in another terminal
+npm run client new
+npm run client guess x
+" > ~/snowman.txt
