@@ -1,4 +1,4 @@
-# snowman-APM-demo
+# snowman-APM-demo-Terraform
 
 Cloning this git repository will allow you to use terraform to deploy a micro GCP instance (Ubuntu 18.04.5 LTS) with the SplunkFx SmartAgent and a Nodejs instrumented application called Snowman. 
 
