@@ -76,30 +76,42 @@ Answer 'yes' to destroy the environment.
 
 # If you want to run trace spans and metrics through an otel collector
 
+## Doanload collector.yaml
+
 In your SNOWMAN GCP VM, download the otel collector.yaml config from https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/master/exporter/sapmexporter/examples/signalfx-collector.yaml
+
+## Point your SignalFx SmartAgent to your collector
 
 Add the following to your /etc/signalfx/trace_endpoint_url file
 cat /etc/signalfx/trace_endpoint_url 
 http://0.0.0.0:7276/v2/trace
 
-You can change your environment attributes so you can pick a service in the APM UI
+## Add an environment tag
+
+You can change your environment attributes so you can pick/identify your service in the APM UI
 Edit the /etc/signalfx/agent.yaml
     defaultSpanTags:
      # Set the environment filter in SignalFx
      environment: "YO-SANDMAN"
 
-Install docker 
+## Install docker 
+
 Use this doc https://linuxconfig.org/how-to-install-docker-on-ubuntu-20-04-lts-focal-fossa
 
-Run your otel collector in a docker container with the following command
+## Run your otel collector in a docker container with the following command
+
 docker run --rm -p 13133:13133 -p 55679-55680 -p 6060:6060 -p 7276:7276 -p 8888:8888 -p 9411:9411 -p 9943:9943 \
     -v "${PWD}/collector.yaml":/etc/collector.yaml:ro \
     -e SFX_TOKEN='ENTER_YOUR_TOKEN_HERE' -e SFX_REALM='ENTER_YOUR_REALM_HERE' \
     --name otelcontribcol otel/opentelemetry-collector-contrib:0.17.0 \
         --config /etc/collector.yaml --mem-ballast-size-mib=683
         
+## Watch for spans and metrics in the logs
+
 Watch the otel collector terminal where you run the docker command above
 Play snowman and see the spans and metrics logged in the collector terminal.
+
+## Check your traces and metrics in the SignalFx APM UI
 
 Go to SignalFx APM UI and see your error and success traces from playing snowman. 
 You will see an error trace when you guess the wrong letter of a word.
